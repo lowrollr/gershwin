@@ -118,7 +118,7 @@ class ScipySolver:
                         "key": key,
                         "best_inputs": [str(int(x * norm_factor)) for x in solution.x.tolist()],
                         "best_result": str(int(fn(solution.x.tolist()) * norm_factor)),
-                        "fn_results": [str(int(fn(solution.x.tolist()))) for fn in fns_to_send]
+                        "fn_results": [str(int(fn(solution.x.tolist()) * norm_factor)) for fn in fns_to_send]
                     }
                 else:
                     return {
@@ -145,7 +145,7 @@ class ScipySolver:
                         "key": key,
                         "best_inputs": [str(int(x * norm_factor)) for x in solution.x.tolist()],
                         "best_result": str(int(fn(solution.x.tolist()) * -1 * norm_factor)),
-                        "fn_results": [str(int(fn(solution.x.tolist()))) for fn in fns_to_send]
+                        "fn_results": [str(int(fn(solution.x.tolist()) * norm_factor)) for fn in fns_to_send]
                     }
                     
                 else:
