@@ -1,0 +1,68 @@
+{
+    "key": "TESTESTESTE",
+    "variables": [
+        {
+            "var_name": "x2",
+            "initial_guess": "1000000",
+            "lower_bound": "0"
+        }
+    ],
+    "constants": [
+        {
+            "var_name": "x0",
+            "value": "43868940603601283078522837"
+        },
+        {
+            "var_name": "x1",
+            "value": "1258993426744706385"
+        },
+        {
+            "var_name": "x6",
+            "value": "280347196500000001490944"
+        },
+        {
+            "var_name": "x10",
+            "value": "11111111111111795006810"
+        }
+    ],
+    "functions": [
+        {
+            "var_name": "x3",
+            "body": "( ( x1 * 0.997 * x2 ) / ( ( 0.997 * x2 ) + x0 ) )"
+        },
+        {
+            "var_name": "x4",
+            "body": "( x0 + x2 )"
+        },
+        {
+            "var_name": "x5",
+            "body": "( x1 - x3 )"
+        },
+        {
+            "var_name": "x7",
+            "body": "( ( x5 * 0.997 * x6 ) / ( ( 0.997 * x6 ) + x4 ) )"
+        },
+        {
+            "var_name": "x8",
+            "body": "( x4 + x6 )"
+        },
+        {
+            "var_name": "x9",
+            "body": "( x5 - x7 )"
+        },
+        {
+            "var_name": "x12",
+            "body": "( ( x8 * 0.997 * x3 ) / ( ( 0.997 * x3 ) + x9 ) )"
+        }
+    ],
+    "constraints": [
+        {
+            "type": "ineq",
+            "body": "x7 - x10"
+        }
+    ],
+    "solve": {
+        "type": "maximize",
+        "body": "x12 - x2"
+    }
+}
