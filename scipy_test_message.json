@@ -65,7 +65,9 @@
         "type": "maximize",
         "body": "x12 - x2"
     },
-    "function_results_to_send": [
+    "return_states": [
+        "x2",
+        "x4",
         "x3",
         "x7"
     ]

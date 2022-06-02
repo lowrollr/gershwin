@@ -28,7 +28,7 @@ class ScipySolver:
         try:
             self.namespace.clear()
             eval_vars = []
-            fns_to_send = []
+            states_to_send = dict()
             constants_to_scale = []
             norm_factor = 1
             
@@ -62,6 +62,9 @@ class ScipySolver:
                         raise Exception(f"Identifier {name} used twice!")
                     self.namespace[name] = f'v[{str(len(eval_vars))}]'
                     eval_vars.append((initial_guess, (lower_bound, upper_bound)))
+
+                    if name in msg['return_states']:
+                        states_to_send[name] = self.compile_function(f'lambda v: {self.namespace[name]}')
                 else:
                     raise Exception("Variable defined improperly: ", v)
 
@@ -76,8 +79,8 @@ class ScipySolver:
                         raise Exception(f"Identifier {name} used twice!")
                     self.namespace[name] = self.parse_function_body(body)
 
-                    if name in msg['function_results_to_send']:
-                        fns_to_send.append(self.compile_function(f'lambda v: {self.namespace[name]}'))
+                    if name in msg['return_states']:
+                        states_to_send[name] = self.compile_function(f'lambda v: {self.namespace[name]}')
 
                 else:
                     raise Exception("Function defined improperly: ", f)
@@ -118,14 +121,14 @@ class ScipySolver:
                         "key": key,
                         "best_inputs": [str(int(x * norm_factor)) for x in solution.x.tolist()],
                         "best_result": str(int(fn(solution.x.tolist()) * norm_factor)),
-                        "fn_results": [str(int(fn(solution.x.tolist()) * norm_factor)) for fn in fns_to_send]
+                        "end_states": {name: str(int(fn(solution.x.tolist()) * norm_factor)) for name, fn in states_to_send.items()}
                     }
                 else:
                     return {
                         "key": key,
                         "best_inputs": [],
                         "best_result": [],
-                        "fn_results": []
+                        "end_states": []
                     }
 
 
@@ -145,7 +148,7 @@ class ScipySolver:
                         "key": key,
                         "best_inputs": [str(int(x * norm_factor)) for x in solution.x.tolist()],
                         "best_result": str(int(fn(solution.x.tolist()) * -1 * norm_factor)),
-                        "fn_results": [str(int(fn(solution.x.tolist()) * norm_factor)) for fn in fns_to_send]
+                        "fn_results": {name: str(int(fn(solution.x.tolist()) * norm_factor)) for name, fn in states_to_send.items()}
                     }
                     
                 else:
